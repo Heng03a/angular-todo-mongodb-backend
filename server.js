@@ -50,4 +50,4 @@ app.get("/", (req, res) => {
 });
 
 // Connect DB
-connectDB();
+////connectDB();
