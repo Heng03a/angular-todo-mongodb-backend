@@ -25,22 +25,20 @@ const app = express();
 // CORS
 const allowedOrigins = [
   "http://localhost:4200",
-  'https://angular-todo-mongodb-frontend-heuh2muk3-phua-kia-hengs-projects.vercel.app',
-  process.env.FRONTEND_URL
+  "https://angular-todo-mongodb-frontend.vercel.app"
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // allow non-browser tools
 
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
+
+    console.log("Blocked by CORS:", origin);
+    return callback(new Error("Not allowed by CORS"));
   },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Requested-With"],
   credentials: true
 }));
 
