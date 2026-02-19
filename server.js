@@ -18,11 +18,27 @@ mongoose.connect(process.env.MONGODB_URI)
   });
 
 const app = express();
-console.log('MONGODB_URI:', process.env.MONGODB_URI);
+// comment below - Production shall not have the URl logged and shown - For secdurity reason
+////console.log('MONGODB_URI:', process.env.MONGODB_URI);
+////console.log("ENV CHECK:", process.env.MONGODB_URI ? "Loaded" : "Missing");
 
 // CORS
+const allowedOrigins = [
+  "http://localhost:4200",
+  'https://angular-todo-mongodb-frontend-heuh2muk3-phua-kia-hengs-projects.vercel.app',
+  process.env.FRONTEND_URL
+];
+
 app.use(cors({
-  origin: "http://localhost:4200",
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Requested-With"],
   credentials: true
